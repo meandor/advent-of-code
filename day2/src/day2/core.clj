@@ -1,10 +1,6 @@
 (ns day2.core
-  (:gen-class))
-
-(defn -main
-  "I don't do a whole lot ... yet."
-  [& args]
-  (println "Hello, World!"))
+  (:gen-class)
+  (:require [clojure.java.io :as io]))
 
 (defn parse-line [line]
   (let [[_ min-occurrence max-occurrence letter password]
@@ -25,3 +21,16 @@
     min-occurrence
     (count-letter-occurrence letter password)
     max-occurrence))
+
+(defn count-valid-passwords [passwords-with-rules]
+  (count (filter valid-password? passwords-with-rules)))
+
+(defn -main [& args]
+  (if (= 1 (count args))
+    (with-open [rdr (io/reader (first args))]
+      (->> (line-seq rdr)
+           (map parse-line)
+           (count-valid-passwords)
+           (str "number of valid passwords: ")
+           (println)))
+    (println "usage: java -jar day2.jar [input.txt location]")))
