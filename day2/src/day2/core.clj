@@ -22,15 +22,21 @@
     (count-letter-occurrence letter password)
     max-occurrence))
 
-(defn count-valid-passwords [passwords-with-rules password-policy-fn]
+(defn count-valid-passwords [password-policy-fn passwords-with-rules]
   (count (filter password-policy-fn passwords-with-rules)))
+
+(defn print-valid-passwords [print-prefix password-policy-fn passwords-with-rules]
+  (->> passwords-with-rules
+       (count-valid-passwords password-policy-fn)
+       (str "number of valid " print-prefix " passwords: ")
+       (println))
+  passwords-with-rules)
 
 (defn -main [& args]
   (if (= 1 (count args))
     (with-open [rdr (io/reader (first args))]
       (->> (line-seq rdr)
            (map parse-line)
-           (count-valid-passwords valid-sled-password?)
-           (str "number of valid sled passwords: ")
-           (println)))
+           (print-valid-passwords "sled" valid-sled-password?)
+           ))
     (println "usage: java -jar day2.jar [input.txt location]")))
