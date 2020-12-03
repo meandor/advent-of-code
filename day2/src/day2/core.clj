@@ -16,21 +16,21 @@
        (filter #(= letter %))
        (count)))
 
-(defn valid-password? [{:keys [password min-occurrence max-occurrence letter]}]
+(defn valid-sled-password? [{:keys [password min-occurrence max-occurrence letter]}]
   (<=
     min-occurrence
     (count-letter-occurrence letter password)
     max-occurrence))
 
-(defn count-valid-passwords [passwords-with-rules]
-  (count (filter valid-password? passwords-with-rules)))
+(defn count-valid-passwords [passwords-with-rules password-policy-fn]
+  (count (filter password-policy-fn passwords-with-rules)))
 
 (defn -main [& args]
   (if (= 1 (count args))
     (with-open [rdr (io/reader (first args))]
       (->> (line-seq rdr)
            (map parse-line)
-           (count-valid-passwords)
-           (str "number of valid passwords: ")
+           (count-valid-passwords valid-sled-password?)
+           (str "number of valid sled passwords: ")
            (println)))
     (println "usage: java -jar day2.jar [input.txt location]")))
