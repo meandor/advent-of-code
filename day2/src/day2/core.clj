@@ -13,3 +13,15 @@
      :min-occurrence (read-string min-occurrence)
      :max-occurrence (read-string max-occurrence)
      :letter         letter}))
+
+(defn count-letter-occurrence [letter word]
+  (->> (seq word)
+       (map #(str %))
+       (filter #(= letter %))
+       (count)))
+
+(defn valid-password? [{:keys [password min-occurrence max-occurrence letter]}]
+  (<=
+    min-occurrence
+    (count-letter-occurrence letter password)
+    max-occurrence))

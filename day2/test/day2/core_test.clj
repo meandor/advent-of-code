@@ -16,3 +16,38 @@
             :max-occurrence 3
             :letter         "o"}
            (core/parse-line "1-3 o: foo")))))
+
+(deftest should-count-letters
+  (testing "one occurrence"
+    (is (= 1 (core/count-letter-occurrence "f" "foo"))))
+
+  (testing "no occurrence"
+    (is (= 0 (core/count-letter-occurrence "k" "foo"))))
+
+  (testing "n occurrence"
+    (is (= 3 (core/count-letter-occurrence "b" "foobbb")))))
+
+(deftest should-check-is-valid-password?
+  (testing "valid password with min=occurrence=max"
+    (is (= true (core/valid-password? {:password       "foo"
+                                       :min-occurrence 1
+                                       :max-occurrence 1
+                                       :letter         "f"}))))
+
+  (testing "valid password with min<occurrence<=max"
+    (is (= true (core/valid-password? {:password       "foo"
+                                       :min-occurrence 1
+                                       :max-occurrence 2
+                                       :letter         "o"}))))
+
+  (testing "valid password with min<=occurrence<max"
+    (is (= true (core/valid-password? {:password       "foo"
+                                       :min-occurrence 1
+                                       :max-occurrence 2
+                                       :letter         "f"}))))
+
+  (testing "invalid password"
+    (is (= false (core/valid-password? {:password       "foo"
+                                        :min-occurrence 3
+                                        :max-occurrence 4
+                                        :letter         "o"})))))
