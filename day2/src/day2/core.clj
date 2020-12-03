@@ -37,7 +37,7 @@
 (defn count-valid-passwords [password-policy-fn passwords-with-rules]
   (count (filter password-policy-fn passwords-with-rules)))
 
-(defn print-valid-passwords [print-prefix password-policy-fn passwords-with-rules]
+(defn print-valid-passwords! [print-prefix password-policy-fn passwords-with-rules]
   (->> passwords-with-rules
        (count-valid-passwords password-policy-fn)
        (str "number of valid " print-prefix " passwords: ")
@@ -49,6 +49,6 @@
     (with-open [rdr (io/reader (first args))]
       (->> (line-seq rdr)
            (map parse-line)
-           (print-valid-passwords "sled" valid-sled-password?)
-           (print-valid-passwords "toboggan" valid-toboggan-password?)))
+           (print-valid-passwords! "sled" valid-sled-password?)
+           (print-valid-passwords! "toboggan" valid-toboggan-password?)))
     (println "usage: java -jar day2.jar [input.txt-location]")))
