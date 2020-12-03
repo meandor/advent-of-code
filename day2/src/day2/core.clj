@@ -39,4 +39,4 @@
            (map parse-line)
            (print-valid-passwords "sled" valid-sled-password?)
            ))
-    (println "usage: java -jar day2.jar [input.txt location]")))
+    (println "usage: java -jar day2.jar [input.txt-location]")))
