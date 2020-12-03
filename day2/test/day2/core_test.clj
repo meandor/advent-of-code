@@ -28,26 +28,27 @@
     (is (= 3 (core/count-letter-occurrence "b" "foobbb")))))
 
 (deftest should-check-is-valid-password?
-  (testing "valid password with min=occurrence=max"
-    (is (= true (core/valid-password? {:password       "foo"
-                                       :min-occurrence 1
-                                       :max-occurrence 1
-                                       :letter         "f"}))))
+  (with-redefs [core/count-letter-occurrence (constantly 1)]
+    (testing "valid password with min=occurrence=max"
+      (is (= true (core/valid-password? {:password       "foo"
+                                         :min-occurrence 1
+                                         :max-occurrence 1
+                                         :letter         "f"}))))
 
-  (testing "valid password with min<occurrence<=max"
-    (is (= true (core/valid-password? {:password       "foo"
-                                       :min-occurrence 1
-                                       :max-occurrence 2
-                                       :letter         "o"}))))
+    (testing "valid password with min<=occurrence<max"
+      (is (= true (core/valid-password? {:password       "foo"
+                                         :min-occurrence 1
+                                         :max-occurrence 2
+                                         :letter         "f"})))))
 
-  (testing "valid password with min<=occurrence<max"
-    (is (= true (core/valid-password? {:password       "foo"
-                                       :min-occurrence 1
-                                       :max-occurrence 2
-                                       :letter         "f"}))))
-
-  (testing "invalid password"
-    (is (= false (core/valid-password? {:password       "foo"
-                                        :min-occurrence 3
-                                        :max-occurrence 4
-                                        :letter         "o"})))))
+  (with-redefs [core/count-letter-occurrence (constantly 2)]
+    (testing "valid password with min<occurrence<=max"
+      (is (= true (core/valid-password? {:password       "foo"
+                                         :min-occurrence 1
+                                         :max-occurrence 2
+                                         :letter         "o"}))))
+    (testing "invalid password"
+      (is (= false (core/valid-password? {:password       "foo"
+                                          :min-occurrence 3
+                                          :max-occurrence 4
+                                          :letter         "o"}))))))
