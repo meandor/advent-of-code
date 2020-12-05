@@ -17,3 +17,49 @@ should_parse_multiple_lines_test() ->
   ],
 
   ?assertEqual(Expected, Actual).
+
+should_move_to_position_test() ->
+  GameState = #{
+    agent_position => [0, 0],
+    board_dimensions => [2, 3],
+    board_layout => [
+      [open_square, open_square],
+      [open_square, tree],
+      [open_square, open_square]
+    ]
+  },
+  Actual = game_environment:move([1, 1], GameState),
+  Expected = #{
+    agent_position => [1, 1],
+    board_dimensions => [2, 3],
+    board_layout => [
+      [open_square, open_square],
+      [open_square, tree],
+      [open_square, open_square]
+    ]
+  },
+
+  ?assertEqual(Expected, Actual).
+
+should_move_to_position_outside_of_right_border_test() ->
+  GameState = #{
+    agent_position => [1, 0],
+    board_dimensions => [2, 3],
+    board_layout => [
+      [open_square, open_square],
+      [tree, open_square],
+      [open_square, open_square]
+    ]
+  },
+  Actual = game_environment:move([1, 0], GameState),
+  Expected = #{
+    agent_position => [0, 0],
+    board_dimensions => [2, 3],
+    board_layout => [
+      [open_square, open_square],
+      [tree, open_square],
+      [open_square, open_square]
+    ]
+  },
+
+  ?assertEqual(Expected, Actual).

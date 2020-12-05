@@ -3,8 +3,8 @@
 -behaviour(gen_server).
 
 -export([start_link/1]).
-
--export([init/1, handle_call/3, handle_cast/2, parse_layout/1]).
+-export([init/1, handle_call/3, handle_cast/2]).
+-export([parse_layout/1, move/2]).
 
 -define(SERVER, ?MODULE).
 -define(OPEN_SQUARE, open_square).
@@ -26,6 +26,12 @@ handle_call(_Request, _From, GameLayout) ->
   {reply, ok, GameLayout}.
 handle_cast(_Request, _State) ->
   erlang:error(not_implemented).
+
+move([MoveX, MoveY], GameState) ->
+  [CurrentX, CurrentY] = maps:get(agent_position, GameState),
+  [SizeX, _] = maps:get(board_dimensions, GameState),
+  NewPosition = [(CurrentX + MoveX) rem SizeX, CurrentY + MoveY],
+  maps:put(agent_position, NewPosition, GameState).
 
 to_field(<<".">>) -> ?OPEN_SQUARE;
 to_field(<<"#">>) -> ?TREE.
