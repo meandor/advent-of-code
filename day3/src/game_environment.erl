@@ -18,7 +18,7 @@ init([LayoutFile]) ->
   io:fwrite("Start loading game environment layout file: ~p~n", [LayoutFile]),
   {ok, Layout} = file:read_file(LayoutFile),
   ParsedLayout = parse_layout(Layout),
-  [FirstRow, _Rest] = ParsedLayout,
+  [FirstRow | _Rest] = ParsedLayout,
   io:fwrite("Done loading game environment layout file~n"),
   InitialState = #{
     done => false,
@@ -33,10 +33,7 @@ handle_call({step, Action}, _From, GameState) ->
   MovedState = move(Action, GameState),
   CheckedDoneState = is_game_over(MovedState),
   Observation = board_at(maps:get(agent_position, CheckedDoneState), CheckedDoneState),
-  {reply, {Observation, maps:get(done, CheckedDoneState)}, CheckedDoneState};
-handle_call(terminate, _From, State) ->
-  io:fwrite("Stopping game environment~n"),
-  {stop, normal, ok, State}.
+  {reply, {Observation, maps:get(done, CheckedDoneState)}, CheckedDoneState}.
 
 handle_cast(_Request, _State) ->
   erlang:error(not_implemented).
