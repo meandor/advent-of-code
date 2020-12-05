@@ -20,7 +20,7 @@ should_parse_multiple_lines_test() ->
 
 should_move_to_position_test() ->
   GameState = #{
-    agent_position => [1, 1],
+    agent_position => [0, 0],
     board_dimensions => [2, 3],
     board_layout => [
       [open_square, open_square],
@@ -30,7 +30,7 @@ should_move_to_position_test() ->
   },
   Actual = game_environment:move([1, 1], GameState),
   Expected = #{
-    agent_position => [2, 2],
+    agent_position => [1, 1],
     board_dimensions => [2, 3],
     board_layout => [
       [open_square, open_square],
@@ -43,7 +43,7 @@ should_move_to_position_test() ->
 
 should_move_to_position_outside_of_right_border_test() ->
   GameState = #{
-    agent_position => [2, 1],
+    agent_position => [1, 0],
     board_dimensions => [2, 3],
     board_layout => [
       [open_square, open_square],
@@ -53,7 +53,7 @@ should_move_to_position_outside_of_right_border_test() ->
   },
   Actual = game_environment:move([1, 0], GameState),
   Expected = #{
-    agent_position => [1, 1],
+    agent_position => [0, 0],
     board_dimensions => [2, 3],
     board_layout => [
       [open_square, open_square],
@@ -67,13 +67,13 @@ should_move_to_position_outside_of_right_border_test() ->
 should_not_be_game_over_test() ->
   GameState = #{
     done => false,
-    agent_position => [1, 1],
+    agent_position => [1, 0],
     board_dimensions => [2, 3]
   },
   Actual = game_environment:is_game_over(GameState),
   Expected = #{
     done => false,
-    agent_position => [1, 1],
+    agent_position => [1, 0],
     board_dimensions => [2, 3]
   },
 
@@ -82,13 +82,13 @@ should_not_be_game_over_test() ->
 should_be_game_over_test() ->
   GameState = #{
     done => false,
-    agent_position => [1, 3],
+    agent_position => [0, 2],
     board_dimensions => [2, 3]
   },
   Actual = game_environment:is_game_over(GameState),
   Expected = #{
     done => true,
-    agent_position => [1, 3],
+    agent_position => [0, 2],
     board_dimensions => [2, 3]
   },
 
