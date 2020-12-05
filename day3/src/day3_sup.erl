@@ -15,5 +15,11 @@ init([]) ->
   SupFlags = #{strategy => one_for_one,
     intensity => 2,
     period => 5},
-  ChildSpecs = [],
+  ChildSpecs = [
+    #{id => game_environment,
+      start => {game_environment, start_link, ["resources/input.txt"]},
+      restart => permanent,
+      shutdown => 5,
+      type => worker}
+  ],
   {ok, {SupFlags, ChildSpecs}}.
