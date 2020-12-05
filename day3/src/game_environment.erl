@@ -18,14 +18,33 @@ init([LayoutFile]) ->
   io:fwrite("Start loading game environment layout file: ~p~n", [LayoutFile]),
   {ok, Layout} = file:read_file(LayoutFile),
   ParsedLayout = parse_layout(Layout),
+  [FirstRow, _Rest] = ParsedLayout,
   io:fwrite("Done loading game environment layout file~n"),
+  InitialState = #{
+    done => false,
+    agent_position => [0, 0],
+    board_dimensions => [length(FirstRow), length(ParsedLayout)],
+    board_layout => ParsedLayout
+  },
   io:fwrite("Done loading game environment~n"),
-  {ok, ParsedLayout}.
+  {ok, InitialState}.
 
-handle_call(_Request, _From, GameLayout) ->
-  {reply, ok, GameLayout}.
+handle_call({step, Action}, _From, GameState) ->
+  MovedState = move(Action, GameState),
+  CheckedDoneState = is_game_over(MovedState),
+  Observation = board_at(maps:get(agent_position, CheckedDoneState), CheckedDoneState),
+  {reply, {Observation, maps:get(done, CheckedDoneState)}, CheckedDoneState};
+handle_call(terminate, _From, State) ->
+  io:fwrite("Stopping game environment~n"),
+  {stop, normal, ok, State}.
+
 handle_cast(_Request, _State) ->
   erlang:error(not_implemented).
+
+board_at([X, Y], GameState) ->
+  Layout = maps:get(board_layout, GameState),
+  Row = lists:nth(Y + 1, Layout),
+  lists:nth(X + 1, Row).
 
 is_game_over(GameState) ->
   [_AgentXPosition, AgentYPosition] = maps:get(agent_position, GameState),
