@@ -47,3 +47,18 @@ Toboggan might encounter.
 ```bash
 rebar3 compile
 ```
+
+## Run
+```bash
+rebar3 shell
+```
+And then invoke the game_agen with:
+```erlang
+gen_server:call(game_agent, {start, [MOVEMENT_VECTOR]}).
+```
+Where `MOVEMENT_VECTOR` is a vector like `[3,1]` which moves 3 right and 1 down.
+
+E.g.:
+```erlang
+gen_server:call(game_agent, {start, [[1,1],[3,1],[5,1],[7,1],[1,2]]}).
+```
