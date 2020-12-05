@@ -63,3 +63,33 @@ should_move_to_position_outside_of_right_border_test() ->
   },
 
   ?assertEqual(Expected, Actual).
+
+should_not_be_game_over_test() ->
+  GameState = #{
+    done => false,
+    agent_position => [1, 0],
+    board_dimensions => [2, 3]
+  },
+  Actual = game_environment:is_game_over(GameState),
+  Expected = #{
+    done => false,
+    agent_position => [1, 0],
+    board_dimensions => [2, 3]
+  },
+
+  ?assertEqual(Expected, Actual).
+
+should_be_game_over_test() ->
+  GameState = #{
+    done => false,
+    agent_position => [0, 2],
+    board_dimensions => [2, 3]
+  },
+  Actual = game_environment:is_game_over(GameState),
+  Expected = #{
+    done => true,
+    agent_position => [0, 2],
+    board_dimensions => [2, 3]
+  },
+
+  ?assertEqual(Expected, Actual).

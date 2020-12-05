@@ -4,7 +4,7 @@
 
 -export([start_link/1]).
 -export([init/1, handle_call/3, handle_cast/2]).
--export([parse_layout/1, move/2]).
+-export([parse_layout/1, move/2, is_game_over/1]).
 
 -define(SERVER, ?MODULE).
 -define(OPEN_SQUARE, open_square).
@@ -27,9 +27,14 @@ handle_call(_Request, _From, GameLayout) ->
 handle_cast(_Request, _State) ->
   erlang:error(not_implemented).
 
+is_game_over(GameState) ->
+  [_AgentXPosition, AgentYPosition] = maps:get(agent_position, GameState),
+  [_SizeX, SizeY] = maps:get(board_dimensions, GameState),
+  maps:put(done, (SizeY - 1) == AgentYPosition, GameState).
+
 move([MoveX, MoveY], GameState) ->
   [CurrentX, CurrentY] = maps:get(agent_position, GameState),
-  [SizeX, _] = maps:get(board_dimensions, GameState),
+  [SizeX, _SizeY] = maps:get(board_dimensions, GameState),
   NewPosition = [(CurrentX + MoveX) rem SizeX, CurrentY + MoveY],
   maps:put(agent_position, NewPosition, GameState).
 
