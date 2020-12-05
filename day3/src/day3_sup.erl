@@ -20,6 +20,11 @@ init([]) ->
       start => {game_environment, start_link, ["resources/input.txt"]},
       restart => permanent,
       shutdown => 5,
+      type => worker},
+    #{id => game_agent,
+      start => {game_agent, start_link, []},
+      restart => permanent,
+      shutdown => 5,
       type => worker}
   ],
   {ok, {SupFlags, ChildSpecs}}.
