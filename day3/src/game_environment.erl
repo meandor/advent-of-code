@@ -22,8 +22,8 @@ init([LayoutFile]) ->
   io:fwrite("Done loading game environment~n"),
   {ok, ParsedLayout}.
 
-handle_call(_Request, _From, State = {}) ->
-  {reply, ok, State}.
+handle_call(_Request, _From, GameLayout) ->
+  {reply, ok, GameLayout}.
 handle_cast(_Request, _State) ->
   erlang:error(not_implemented).
 
