@@ -33,10 +33,19 @@ handle_call({step, Action}, _From, GameState) ->
   MovedState = move(Action, GameState),
   CheckedDoneState = is_game_over(MovedState),
   Observation = board_at(maps:get(agent_position, CheckedDoneState), CheckedDoneState),
-  {reply, {Observation, maps:get(done, CheckedDoneState)}, CheckedDoneState}.
+  {reply, {Observation, maps:get(done, CheckedDoneState)}, CheckedDoneState};
+handle_call({reset}, _From, GameState) ->
+  io:fwrite("Start reset game~n"),
+  ResetState = reset(GameState),
+  io:fwrite("Done reset game~n"),
+  {reply, ok, ResetState}.
 
 handle_cast(_Request, _State) ->
   erlang:error(not_implemented).
+
+reset(GameState) ->
+  ResetAgent = maps:put(agent_position, [0, 0], GameState),
+  maps:put(done, false, ResetAgent).
 
 board_at([X, Y], GameState) ->
   Layout = maps:get(board_layout, GameState),
