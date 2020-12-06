@@ -130,6 +130,127 @@ class ValidatorSpec extends UnitSpec {
     }
   }
 
+  Feature("isValidHairColor") {
+    Scenario("should return true for red") {
+      val values = Map(
+        "hcl" -> "#ff0000"
+      )
+
+      val actual   = Validator.isValidHairColor(values)
+      val expected = true
+
+      actual shouldBe expected
+    }
+
+    Scenario("should return false for missing #") {
+      val values = Map(
+        "hcl" -> "ff0000"
+      )
+
+      val actual   = Validator.isValidHairColor(values)
+      val expected = false
+
+      actual shouldBe expected
+    }
+
+    Scenario("should return false for too many digits passport id") {
+      val values = Map(
+        "byr" -> "2002",
+        "iyr" -> "2020",
+        "eyr" -> "2030",
+        "hgt" -> "193 cm",
+        "hcl" -> "#123abc",
+        "ecl" -> "blu",
+        "pid" -> "0000000111"
+      )
+      val passport = Passport(values)
+
+      val actual   = Validator.isValid(passport)
+      val expected = false
+
+      actual shouldBe expected
+    }
+  }
+
+  Feature("isValidHeight") {
+    Scenario("should return false for invalid content") {
+      val values = Map(
+        "hgt" -> "1foo"
+      )
+
+      val actual   = Validator.isValidHeight(values)
+      val expected = false
+
+      actual shouldBe expected
+    }
+
+    Scenario("should return true for 60in") {
+      val values = Map(
+        "hgt" -> "60in"
+      )
+
+      val actual   = Validator.isValidHeight(values)
+      val expected = true
+
+      actual shouldBe expected
+    }
+
+    Scenario("should return false for 58in") {
+      val values = Map(
+        "hgt" -> "58in"
+      )
+
+      val actual   = Validator.isValidHeight(values)
+      val expected = false
+
+      actual shouldBe expected
+    }
+
+    Scenario("should return false for 77in") {
+      val values = Map(
+        "hgt" -> "77in"
+      )
+
+      val actual   = Validator.isValidHeight(values)
+      val expected = false
+
+      actual shouldBe expected
+    }
+
+    Scenario("should return true for 183cm") {
+      val values = Map(
+        "hgt" -> "183cm"
+      )
+
+      val actual   = Validator.isValidHeight(values)
+      val expected = true
+
+      actual shouldBe expected
+    }
+
+    Scenario("should return false for 149cm") {
+      val values = Map(
+        "hgt" -> "149cm"
+      )
+
+      val actual   = Validator.isValidHeight(values)
+      val expected = false
+
+      actual shouldBe expected
+    }
+
+    Scenario("should return false for 194cm") {
+      val values = Map(
+        "hgt" -> "194cm"
+      )
+
+      val actual   = Validator.isValidHeight(values)
+      val expected = false
+
+      actual shouldBe expected
+    }
+  }
+
   Feature("isValid") {
     Scenario("should return true for valid passport") {
       val values = Map(
