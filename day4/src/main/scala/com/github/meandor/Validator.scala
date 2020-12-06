@@ -26,12 +26,15 @@ object Validator {
     }
   }
 
-  def isValid(passport: Passport): Boolean = {
-    val requiredFieldsPresent = requiredFields.foldLeft(true) { (acc, element) =>
+  def hasRequiredFields(passport: Passport): Boolean = {
+    requiredFields.foldLeft(true) { (acc, element) =>
       acc & passport.values.contains(element)
     }
+  }
+
+  def isValid(passport: Passport): Boolean = {
     val passportValues = passport.values
-    requiredFieldsPresent &&
+    hasRequiredFields(passport) &&
     isValidYear("byr", 1920, 2002, passportValues) &&
     isValidYear("iyr", 2010, 2020, passportValues) &&
     isValidYear("eyr", 2020, 2030, passportValues) &&
