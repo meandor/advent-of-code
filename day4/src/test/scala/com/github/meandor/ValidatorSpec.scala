@@ -1,16 +1,89 @@
 package com.github.meandor
 
 class ValidatorSpec extends UnitSpec {
+  Feature("isValidYear") {
+    Scenario("is valid for 1920<=byr<=2002") {
+      val values = Map(
+        "byr" -> "2002"
+      )
+
+      val actual   = Validator.isValidYear("byr", 1920, 2002, values)
+      val expected = true
+
+      actual shouldBe expected
+    }
+
+    Scenario("is invalid for byr<1920") {
+      val values = Map(
+        "byr" -> "1919"
+      )
+
+      val actual   = Validator.isValidYear("byr", 1920, 2002, values)
+      val expected = false
+
+      actual shouldBe expected
+    }
+
+    Scenario("is invalid for foo>2002") {
+      val values = Map(
+        "foo" -> "2003"
+      )
+
+      val actual   = Validator.isValidYear("foo", 1920, 2002, values)
+      val expected = false
+
+      actual shouldBe expected
+    }
+
+    Scenario("is invalid for foo not 4 digits") {
+      val values = Map(
+        "byr" -> "1sa3"
+      )
+
+      val actual   = Validator.isValidYear("byr", 1920, 2002, values)
+      val expected = false
+
+      actual shouldBe expected
+    }
+  }
+
+  Feature("isValidEyeColor") {
+    val colors = Seq("amb", "blu", "brn", "gry", "grn", "hzl", "oth")
+    colors.foreach { color =>
+      Scenario(s"is valid for ecl=$color") {
+        val values = Map(
+          "ecl" -> color
+        )
+
+        val actual   = Validator.isValidEyeColor(values)
+        val expected = true
+
+        actual shouldBe expected
+      }
+    }
+
+    Scenario("is invalid for 111") {
+      val values = Map(
+        "ecl" -> "111"
+      )
+
+      val actual   = Validator.isValidEyeColor(values)
+      val expected = false
+
+      actual shouldBe expected
+    }
+  }
+
   Feature("isValid") {
     Scenario("should return true for valid passport") {
       val values = Map(
-        "byr" -> "foo",
-        "iyr" -> "foo",
-        "eyr" -> "foo",
-        "hgt" -> "foo",
-        "hcl" -> "foo",
-        "ecl" -> "foo",
-        "pid" -> "foo"
+        "byr" -> "2002",
+        "iyr" -> "2020",
+        "eyr" -> "2030",
+        "hgt" -> "193 cm",
+        "hcl" -> "#123abc",
+        "ecl" -> "blu",
+        "pid" -> "000000001"
       )
       val passport = Passport(values)
 
@@ -32,12 +105,12 @@ class ValidatorSpec extends UnitSpec {
 
     Scenario("should return false for one missing required field passport") {
       val values = Map(
-        "byr" -> "foo",
-        "iyr" -> "foo",
-        "eyr" -> "foo",
-        "hgt" -> "foo",
-        "hcl" -> "foo",
-        "ecl" -> "foo"
+        "byr" -> "2002",
+        "iyr" -> "2020",
+        "eyr" -> "2030",
+        "hgt" -> "193 cm",
+        "hcl" -> "#123abc",
+        "ecl" -> "blu"
       )
       val passport = Passport(values)
 
