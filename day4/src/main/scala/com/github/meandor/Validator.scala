@@ -8,6 +8,11 @@ object Validator {
     values.get("ecl").exists(validEyeColors.contains(_))
   }
 
+  def isValidPassportId(values: Map[String, String]): Boolean = {
+    val passportIdPattern = """\d{9}""".r
+    values.get("pid").exists(passportIdPattern matches _)
+  }
+
   def isInBetween(start: Int, end: Int)(value: Int): Boolean = {
     start <= value && value <= end
   }
@@ -30,6 +35,7 @@ object Validator {
     isValidYear("byr", 1920, 2002, passportValues) &&
     isValidYear("iyr", 2010, 2020, passportValues) &&
     isValidYear("eyr", 2020, 2030, passportValues) &&
-    isValidEyeColor(passportValues)
+    isValidEyeColor(passportValues) &&
+    isValidPassportId(passportValues)
   }
 }

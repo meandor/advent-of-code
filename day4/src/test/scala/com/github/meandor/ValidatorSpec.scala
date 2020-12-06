@@ -74,6 +74,62 @@ class ValidatorSpec extends UnitSpec {
     }
   }
 
+  Feature("is valid passport-id") {
+    Scenario("should return false for too short passport id") {
+      val values = Map(
+        "byr" -> "2002",
+        "iyr" -> "2020",
+        "eyr" -> "2030",
+        "hgt" -> "193 cm",
+        "hcl" -> "#123abc",
+        "ecl" -> "blu",
+        "pid" -> "00000001"
+      )
+      val passport = Passport(values)
+
+      val actual   = Validator.isValid(passport)
+      val expected = false
+
+      actual shouldBe expected
+    }
+
+    Scenario("should return false for not only digits passport id") {
+      val values = Map(
+        "byr" -> "2002",
+        "iyr" -> "2020",
+        "eyr" -> "2030",
+        "hgt" -> "193 cm",
+        "hcl" -> "#123abc",
+        "ecl" -> "blu",
+        "pid" -> "00000001a"
+      )
+      val passport = Passport(values)
+
+      val actual   = Validator.isValid(passport)
+      val expected = false
+
+      actual shouldBe expected
+    }
+
+    Scenario("should return false for too many digits passport id") {
+      val values = Map(
+        "byr" -> "2002",
+        "iyr" -> "2020",
+        "eyr" -> "2030",
+        "hgt" -> "193 cm",
+        "hcl" -> "#123abc",
+        "ecl" -> "blu",
+        "pid" -> "0000000111"
+      )
+      val passport = Passport(values)
+
+      val actual   = Validator.isValid(passport)
+      val expected = false
+
+      actual shouldBe expected
+    }
+  }
+
   Feature("isValid") {
     Scenario("should return true for valid passport") {
       val values = Map(
