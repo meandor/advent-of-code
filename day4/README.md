@@ -39,3 +39,27 @@ The third passport is interesting; the only missing field is cid, so it looks li
 The fourth passport is missing two fields, cid and byr. Missing cid is fine, but missing any other field is not, so this passport is invalid.
 
 According to the above rules, your improved system would report 2 valid passports.
+
+## Test
+Run in sbt shell:
+```sbt
+test
+```
+
+## Package
+Run in sbt shell:
+```sbt
+assembly
+```
+Will create a `day4-assembly-VERSION.jar` file within `target/scala-VERSION/`.
+
+## Run
+Run in sbt shell:
+```sbt
+run <PATH_TO_INPUT_FILE>
+```
+
+e.g.:
+```sbt
+run src/main/resources/input
+```
