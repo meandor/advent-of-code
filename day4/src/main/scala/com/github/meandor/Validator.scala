@@ -19,7 +19,8 @@ object Validator {
           val withoutUnit = heightMatch.group(1)
           val height      = withoutUnit.toInt
           val unit        = heightMatch.group(2)
-          unit == "in" && 59 <= height && height <= 76 || unit == "cm" && 150 <= height && height <= 193
+          unit == "in" && 59 <= height && height <= 76 ||
+          unit == "cm" && 150 <= height && height <= 193
         } else {
           false
         }
@@ -27,7 +28,7 @@ object Validator {
   }
 
   def isValidHairColor(values: Map[String, String]): Boolean = {
-    val hexPattern = """#[A-Fa-f0-9]{6}""".r
+    val hexPattern = """#[a-f0-9]{6}""".r
     values.get("hcl").exists(hexPattern matches _)
   }
 
@@ -61,9 +62,9 @@ object Validator {
     isValidYear("byr", 1920, 2002, passportValues) &&
     isValidYear("iyr", 2010, 2020, passportValues) &&
     isValidYear("eyr", 2020, 2030, passportValues) &&
-    isValidEyeColor(passportValues) &&
-    isValidPassportId(passportValues) &&
+    isValidHeight(passportValues) &&
     isValidHairColor(passportValues) &&
-    isValidHeight(passportValues)
+    isValidEyeColor(passportValues) &&
+    isValidPassportId(passportValues)
   }
 }

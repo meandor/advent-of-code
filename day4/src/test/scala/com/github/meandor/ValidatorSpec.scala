@@ -153,19 +153,12 @@ class ValidatorSpec extends UnitSpec {
       actual shouldBe expected
     }
 
-    Scenario("should return false for too many digits passport id") {
+    Scenario("should return false for z") {
       val values = Map(
-        "byr" -> "2002",
-        "iyr" -> "2020",
-        "eyr" -> "2030",
-        "hgt" -> "193 cm",
-        "hcl" -> "#123abc",
-        "ecl" -> "blu",
-        "pid" -> "0000000111"
+        "hcl" -> "#zf0000"
       )
-      val passport = Passport(values)
 
-      val actual   = Validator.isValid(passport)
+      val actual   = Validator.isValidHairColor(values)
       val expected = false
 
       actual shouldBe expected
@@ -257,10 +250,10 @@ class ValidatorSpec extends UnitSpec {
         "byr" -> "2002",
         "iyr" -> "2020",
         "eyr" -> "2030",
-        "hgt" -> "193 cm",
+        "hgt" -> "193cm",
         "hcl" -> "#123abc",
         "ecl" -> "blu",
-        "pid" -> "000000001"
+        "pid" -> "896056539"
       )
       val passport = Passport(values)
 
